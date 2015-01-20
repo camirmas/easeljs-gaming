@@ -1,6 +1,5 @@
-var character, characterIdle;
+var character, characterIdle, currentCharacter;
 var stage;
-var currentCharacter;
 
 function init() {
   stage = new createjs.Stage("demoCanvas");
@@ -12,7 +11,7 @@ function init() {
     "animations": {
       "run": [0, 9]
     }
-  }
+  };
 
   var dataRight = {
     "framerate": 30,
@@ -21,7 +20,7 @@ function init() {
     "animations": {
       "run": [0, 9]
     }
-  }
+  };
 
   var dataIdle = {
     "framerate": 30,
@@ -30,7 +29,7 @@ function init() {
     "animations": {
       "stand": 0
     }
-  }
+  };
 
   var spriteSheetL = new createjs.SpriteSheet(dataLeft);
   var spriteSheetR = new createjs.SpriteSheet(dataRight);
@@ -53,22 +52,22 @@ function init() {
 
 function move(event) {
   if (key.isPressed('left')) {
-    characterL.x = currentCharacter.x
-    characterL.y = currentCharacter.y
+    characterL.x = currentCharacter.x;
+    characterL.y = currentCharacter.y;
     stage.removeChild(currentCharacter);
     currentCharacter = characterL;
     stage.addChild(currentCharacter);
     currentCharacter.x -= event.delta/1000 * 100;
   } else if (key.isPressed('right')) {
-    characterR.x = currentCharacter.x
-    characterR.y = currentCharacter.y
+    characterR.x = currentCharacter.x;
+    characterR.y = currentCharacter.y;
     stage.removeChild(currentCharacter);
     currentCharacter = characterR;
     stage.addChild(currentCharacter);
     currentCharacter.x += event.delta/1000 * 100;
   } else {
-    characterI.x = currentCharacter.x
-    characterI.y = currentCharacter.y
+    characterI.x = currentCharacter.x;
+    characterI.y = currentCharacter.y;
     stage.removeChild(currentCharacter);
     currentCharacter = characterI;
     stage.addChild(currentCharacter);
