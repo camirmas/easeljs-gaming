@@ -3,9 +3,13 @@ var stage;
 var score = 0;
 var coins = [];
 var text = new createjs.Text("Score: " + score, "20px Arial", "#ff7700");
+var image = new Image();
+image.src = "img/background.png";
 
 function init() {
   stage = new createjs.Stage("demoCanvas");
+  var background = new createjs.Bitmap(image);
+  stage.addChild(background);
   stage.addChild(text);
 
   /* -------- SpriteSheet params -------- */
@@ -31,7 +35,7 @@ function init() {
           frames: [1, 5],
         },
         runR: {
-          frames: [9, 10],
+          frames: [10, 9],
         },
         runU: {
           frames: [2, 6],
@@ -57,6 +61,8 @@ function init() {
   standD = new createjs.Sprite(spriteSheet, "standD");
 
   currentCharacter = characterD;
+  currentCharacter.x = 800;
+  currentCharacter.y = 250;
   stage.addChild(currentCharacter);
 
   /* -------- Coin Creation -------- */
@@ -64,7 +70,7 @@ function init() {
     var spriteSheetCoin = new createjs.SpriteSheet(data.coin);
     coin = new createjs.Sprite(spriteSheetCoin, "spin");
     coin.x = Math.random() * 900;
-    coin.y = Math.random() * 300;
+    coin.y = Math.random() * 200 + 200;
     coins.push(coin);
     stage.addChild(coin);
   }
@@ -109,19 +115,19 @@ function changeScoreText() {
 
 /* -------- Animation Helpers -------- */
 function move(event) {
-  if (key.isPressed('left')) {
+  if (key.isPressed('left') && currentCharacter.x > -10) {
     changeAnimation(characterL);
     currentCharacter.x -= event.delta/1000 * 100;
 
-  } else if (key.isPressed('right')) {
+  } else if (key.isPressed('right') && currentCharacter.x < 840) {
     changeAnimation(characterR);
     currentCharacter.x += event.delta/1000 * 100;
 
-  } else if (key.isPressed('up')) {
+  } else if (key.isPressed('up') && currentCharacter.y > 200) {
     changeAnimation(characterU);
     currentCharacter.y -= event.delta/1000 * 100;
 
-  } else if (key.isPressed('down')) {
+  } else if (key.isPressed('down') && currentCharacter.y < 500) {
     changeAnimation(characterD);
     currentCharacter.y += event.delta/1000 * 100;
 
