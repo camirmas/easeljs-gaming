@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>EaselJS Practice</title>
+  </head>
+  <body onload="init();">
+    <canvas id="demoCanvas" width="900" height="300"></canvas>
+    <script src="https://code.createjs.com/easeljs-0.8.0.min.js"></script>
+    <script src="https://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+  </body>
+  <script>
+  function init() {
+    var stage = new createjs.Stage("demoCanvas");
+    var image = new Image();
+    image.src = "http://2dwillneverdie.com/wp-content/uploads/kiwi-FinalFight-Haggarwalk2.gif";
+    var bmp = new createjs.Bitmap(image);
+    stage.addChild(bmp);
+
+    createjs.Tween.get(bmp, { loop: true })
+    .to({ x: 700 }, 1000, createjs.Ease.getElasticInOut(20, 10))
+    .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+    .to({ alpha: 0, y: 225 }, 100)
+
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener("tick", stage);
+  }
+  </script>
+</html>
