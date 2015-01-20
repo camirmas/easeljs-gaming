@@ -6,69 +6,68 @@ var text = new createjs.Text("Score: " + score, "20px Arial", "#ff7700");
 
 function init() {
   stage = new createjs.Stage("demoCanvas");
+  stage.addChild(text);
 
-  var dataCoin = {
-    "framerate": 30,
-    "images": ["img/coin.png"],
-    "frames": { width: 50, height: 50 },
-    "animations": {
-      "spin": [0,9]
+  /* -------- SpriteSheet params -------- */
+  var data = {
+    "coin": {
+      "framerate": 30,
+      "images": ["img/coin.png"],
+      "frames": { width: 50, height: 50 },
+      "animations": {
+        "spin": [0,9]
+      }
+    },
+    character: {
+      framerate: 10,
+      images: ["img/cam_sprite.png"],
+      frames: { width: 136.5, height: 160 },
+      animations: {
+        standL: 5,
+        standR: 9,
+        standU: 3,
+        standD: 0,
+        runL: {
+          frames: [1, 5],
+        },
+        runR: {
+          frames: [9, 10],
+        },
+        runU: {
+          frames: [2, 6],
+        },
+        runD: {
+          frames: [4, 8],
+        }
+      }
     }
   }
 
-  var dataLeft = {
-    "framerate": 10,
-    "images": ["img/cam_pixel_left.png"],
-    "frames": { width: 123.67, height: 150 },
-    "animations": {
-      "run": [0, 1]
-    }
-  };
+  /* -------- Character Creation -------- */
+  var spriteSheet = new createjs.SpriteSheet(data.character);
 
-  var dataRight = {
-    "framerate": 10,
-    "images": ["img/cam_pixel_right.png"],
-    "frames": { width: 127, height: 150 },
-    "animations": {
-      "run": [0, 1]
-    }
-  };
+  characterL = new createjs.Sprite(spriteSheet, "runL");
+  characterR = new createjs.Sprite(spriteSheet, "runR");
+  characterU = new createjs.Sprite(spriteSheet, "runU");
+  characterD = new createjs.Sprite(spriteSheet, "runD");
 
-  var dataIdle = {
-    "images": ["img/cam_pixel.png"],
-    "frames": { width: 121, height: 150 },
-    "animations": {
-      "stand": 0
-    }
-  };
+  standL = new createjs.Sprite(spriteSheet, "standL");
+  standR = new createjs.Sprite(spriteSheet, "standR");
+  standU = new createjs.Sprite(spriteSheet, "standU");
+  standD = new createjs.Sprite(spriteSheet, "standD");
 
-  var spriteSheetL = new createjs.SpriteSheet(dataLeft);
-  var spriteSheetR = new createjs.SpriteSheet(dataRight);
-  var spriteSheetI = new createjs.SpriteSheet(dataIdle);
-
-  characterI = new createjs.Sprite(spriteSheetI, "stand");
-  characterL = new createjs.Sprite(spriteSheetL, "run");
-  characterR = new createjs.Sprite(spriteSheetR, "run");
-  currentCharacter = characterI;
-
-  characterI.x = stage.canvas.width / 2;
-  characterI.y = 50;
-
+  currentCharacter = characterD;
   stage.addChild(currentCharacter);
-  stage.addChild(text);
 
-
+  /* -------- Coin Creation -------- */
   for (var i = 0; i < 10; i++) {
-    var spriteSheetCoin = new createjs.SpriteSheet(dataCoin);
+    var spriteSheetCoin = new createjs.SpriteSheet(data.coin);
     coin = new createjs.Sprite(spriteSheetCoin, "spin");
-    coin.x = Math.random() * 800;
-    coin.y = Math.random() * 400;
+    coin.x = Math.random() * 900;
+    coin.y = Math.random() * 300;
     coins.push(coin);
     stage.addChild(coin);
   }
-
-  var event = new Event("coin");
-  createjs.Ticker.addEventListener("coin", nearCoin);
 
   createjs.Ticker.timingMode = createjs.Ticker.RAF;
   createjs.Ticker.addEventListener("tick", stage);
@@ -76,6 +75,7 @@ function init() {
   createjs.Ticker.addEventListener("tick", scoreAndRemoveCoin);
 }
 
+/* -------- Coin Helpers -------- */
 function nearCoin() {
   for(var i = 0; i < coins.length; i++) {
     var coin = coins[i];
@@ -107,6 +107,7 @@ function changeScoreText() {
   stage.addChild(text);
 }
 
+/* -------- Animation Helpers -------- */
 function move(event) {
   if (key.isPressed('left')) {
     changeAnimation(characterL);
@@ -117,13 +118,15 @@ function move(event) {
     currentCharacter.x += event.delta/1000 * 100;
 
   } else if (key.isPressed('up')) {
+    changeAnimation(characterU);
     currentCharacter.y -= event.delta/1000 * 100;
 
   } else if (key.isPressed('down')) {
+    changeAnimation(characterD);
     currentCharacter.y += event.delta/1000 * 100;
 
   } else {
-    changeAnimation(characterI);
+    changeToStanding(currentCharacter);
   }
 }
 
@@ -133,4 +136,21 @@ function changeAnimation(character) {
   stage.removeChild(currentCharacter);
   currentCharacter = character;
   stage.addChild(currentCharacter);
+}
+
+function changeToStanding(character) {
+  switch(character) {
+    case characterL:
+      changeAnimation(standL);
+      break;
+    case characterR:
+      changeAnimation(standR);
+      break;
+    case characterU:
+      changeAnimation(standU);
+      break;
+    case characterD:
+      changeAnimation(standD);
+      break;
+  }
 }
