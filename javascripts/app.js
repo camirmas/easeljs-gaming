@@ -1,4 +1,5 @@
-var character, characterIdle, currentCharacter;
+var characterL, characterR, characterU, characterD, currentCharacter;
+var standL, standR, standU, standD;
 var stage;
 var score = 0;
 var coins = [];
@@ -14,12 +15,12 @@ function init() {
 
   /* -------- SpriteSheet params -------- */
   var data = {
-    "coin": {
-      "framerate": 30,
-      "images": ["img/coin.png"],
-      "frames": { width: 50, height: 50 },
-      "animations": {
-        "spin": [0,9]
+    coin: {
+      framerate: 30,
+      images: ["img/coin.png"],
+      frames: { width: 50, height: 50 },
+      animations: {
+        spin: [0,9]
       }
     },
     character: {
